@@ -1,8 +1,17 @@
-const Snippet = require('./models/Snippet.model');
+const express = require('express');
+const router = require('./middleware/routes');
+const logger = require('./middleware/logger');
+const errorHandler = require('./middleware/errorHandler');
 
-async function testModels() {
-  const snippets = await Snippet.select();
-  console.log(snippets);
-}
+const app = express();
 
-testModels();
+// Middleware
+app.use(express.json()); // parses requests
+app.use(logger);
+app.use(router);
+app.use(errorHandler);
+
+// Now start our app
+app.listen(process.env.PORT || 5000, () => {
+  console.log('Snips server running on port 5000');
+});
